@@ -15,7 +15,7 @@ This course introduces students to climate data, including its acquisition, proc
   
 - [Sample Survey Data](survey.csv)  
 
-- [Sample Weather Data](Wifi_Thermometer_export_202409061421.csv)  
+- [Sample Weather Data](Wifi Thermometer_export_202409061421.csv)  
 
 
 ---
