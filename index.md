@@ -19,6 +19,7 @@ This course introduces students to climate data, including its acquisition, proc
 |-- index.md
 |-- syllabus.md
 
+[Home](index.md) | [Syllabus](syllabus.md) | [Assignments](assignments.md) | [Resources](resources.md)
 
 ---
 
