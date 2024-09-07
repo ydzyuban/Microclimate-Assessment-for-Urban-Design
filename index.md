@@ -10,8 +10,8 @@ title: "Microclimate Assessment for Urban Design"
 This course introduces students to climate data, including its acquisition, processing, and visualization.
 
 ## Assignments 
-- [Assignment 2 - IET Project](Assignment_2/IET.rmd)
-- [Survey Data for Assignment 2](Assignment_2/survey.csv)
+- [Assignment 2 - IET Project](IET.rmd)
+- [Survey Data for Assignment 2](survey.csv)
 - 
 ---
 
