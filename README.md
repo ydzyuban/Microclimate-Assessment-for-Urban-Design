@@ -1,3 +1,7 @@
-# Microclimate-Assessment-for-Urban-Design
-#Sample code for class exercises
-#Open IET.rmd for individual experienced temperature analysis
+# Course Title: Microclimate Assessment for Urban Design
+
+## Instructor: Dr. Yuliya Dzyuban
+
+### Assignments
+
+- IET: Example of for Individual temeprature assessmnet
