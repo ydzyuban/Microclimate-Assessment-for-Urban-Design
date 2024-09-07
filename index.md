@@ -12,7 +12,8 @@ This course introduces students to climate data, including its acquisition, proc
 ## Assignments 
 - [Example for Assignment 2 - IET Project](IET.Rmd)
 - [Sample Survey Data for Assignment 2](survey.csv)
-- [Sample Weather data for Assignment 2](Wifi Thermometer_export_202409061421.csv)
+- [Sample Weather Data for Assignment 2](Wifi Thermometer_export_202409061421.csv)
+
 ---
 
-_For more information, visit the [ydzyuban/Microclimate-Assessment-for-Urban-Design)._  
+
