@@ -2,6 +2,6 @@
 
 ## Instructor: Dr. Yuliya Dzyuban
 
-### Assignments
+### Assignment 2
 
 - IET: Example of for Individual temeprature assessmnet
