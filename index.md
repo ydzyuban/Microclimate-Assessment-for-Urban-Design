@@ -11,7 +11,7 @@ This course introduces students to climate data, including its acquisition, proc
 
 ## Assignment 2 
 
-- [Assignment 2 - IET Project](Assignment_2/IET.rmd)  
+- [Assignment 2 - IET Project](Assignment_2/IET.Rmd)  
   *(RMarkdown file preview may not render perfectly on GitHub, but you can view the raw file or use an R environment to run the code.)*
 - [Sample Survey Data](Assignment_2/survey.csv)  
   *(CSV file should render in a tabular format directly on GitHub.)*
