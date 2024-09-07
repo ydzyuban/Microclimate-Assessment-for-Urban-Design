@@ -11,6 +11,13 @@ This course introduces students to climate data, including its acquisition, proc
 
 ## Assignments 
 - **Assignment 2**: Individual Experienced Temperature
+|-- assignments/
+|   |-- IET.md
+|   |-- assignment2.md
+|-- resources/
+|   |-- reading1.md
+|-- index.md
+|-- syllabus.md
 
 
 ---
