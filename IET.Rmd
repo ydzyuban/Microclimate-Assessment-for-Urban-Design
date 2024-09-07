@@ -1,0 +1,204 @@
+---
+title: "IET_MicrAssClass"
+output: html_document
+date: "2024-09-05"
+---
+
+#paste the following into terminal (you only need to install packages once)
+install.packages("data.table", "lubridate", "dplyr", "tidyverse", "ggplot2", "pastecs")
+
+```{r}
+
+#You need to load packages every time you start the R session
+
+library(data.table)        # used for datatable manipulation
+library(lubridate)         # used for date manipulation
+library(dplyr)             # used for object manipulation
+library(tidyverse)         # used for data celaning and manipulation
+library(ggplot2)           # used for visualization
+library(pastecs)           # statistics
+
+```
+
+
+
+```{r}
+## Pre-processing inputs
+
+Temp_dir = "Wifi Thermometer_export_202409061421.csv" #assign string name
+Survey_dir = "survey.csv" #assign string name
+# datetime specifications to clean data
+start_dt = "2024-09-05 10:30:00"
+end_dt = "2024-09-06 14:00:00"
+TempRH = data.table::fread(Temp_dir, header = TRUE)    #create dataframe
+Survey_dir = data.table::fread(Survey_dir, header = TRUE) 
+
+
+survey_labels_location <- c("1"= "work", "2" = "home", "3" ="street",
+            "4" = "subway station", "5" = "train", "6" = "store")
+
+survey_labels_in_out <- c("1"= "indoor", "2" = "outdoor", "3" ="transit")
+
+survey_labels_AC <- c("0"= "no", "1" = "yes")
+
+```
+
+#Converting time
+
+```{r}
+# Filtering the data based on date
+weather <- TempRH  #creating an object from the dataframe that we are going to manipulate
+class(weather$Timestamp)    #checking the class of the variable
+weather$Timestamp <- as.POSIXct(format(as.POSIXct(weather$Timestamp, format = "%m/%d/%Y %H:%M"), "%Y-%m-%d %H:%M"), format = "%Y-%m-%d %H:%M")  #converting the timestamp column from "character" to date specific format that R recognizes
+weather <- weather[weather$Timestamp >= start_dt & weather$Timestamp <= end_dt, ]   #filtering data to specific time window of interest
+class(weather$Timestamp) 
+
+survey <- Survey_dir
+survey$StartTime <- as.POSIXct(format(as.POSIXct(survey$StartTime, format = "%m/%d/%Y %H:%M"), "%Y-%m-%d %H:%M"), format = "%Y-%m-%d %H:%M") 
+survey$EndTime <- as.POSIXct(format(as.POSIXct(survey$EndTime, format = "%m/%d/%Y %H:%M"), "%Y-%m-%d %H:%M"), format = "%Y-%m-%d %H:%M") 
+
+
+```
+
+
+
+#Plotting time series for air temperature and humidity
+```{r}
+
+
+ggplot(data = weather, aes(x = Timestamp, y = Temperature_Fahrenheit)) + geom_point() + theme_classic()  #plotting time series for air temperature
+ggplot(data = weather, aes(x = Timestamp, y = Relative_Humidity)) + geom_point() + theme_classic()  #plotting time series for relative humidity
+
+```
+```{r}
+
+merged <- weather
+
+merged$Location <- NA
+merged$In_Out <- NA
+merged$AC <- NA
+
+# Loop over each row in the survey dataframe
+for (i in 1:nrow(survey)) {
+  # Identify the time interval in the survey row
+  start_time <- survey$StartTime[i]
+  end_time <- survey$EndTime[i]
+  
+  # For merged data, assign the value where Timestamp falls between StartTime and EndTime
+ 
+  merged$Location[merged$Timestamp >= start_time & merged$Timestamp <= end_time] <- survey$Location[i]
+   merged$In_Out[merged$Timestamp >= start_time & merged$Timestamp <= end_time] <- survey$In_Out[i]
+    merged$AC[merged$Timestamp >= start_time & merged$Timestamp <= end_time] <- survey$AC[i]
+}
+```
+
+
+
+#Histograms
+
+```{r}
+
+merged$Location <- as.factor(merged$Location)
+merged$In_Out <- as.factor(merged$In_Out)
+merged$AC <- as.factor(merged$AC)
+
+
+
+
+ggplot(data=merged, aes(x = Temperature_Fahrenheit, fill = Location)) +
+  geom_histogram() + 
+  labs(x = "Temperature (°F)", fill = "Location") +
+  scale_fill_manual(values = c("1"= "blue", "2" = "green", "3" = "red", 
+                               "4" = "purple", "5" = "orange", "6" = "brown"), 
+                    labels = survey_labels_location) +
+  theme_minimal()
+
+
+ggplot(data=merged, aes(x = Temperature_Fahrenheit, fill = In_Out)) +
+  geom_histogram() + 
+  labs(x = "Temperature (°F)", fill = "Exposure") +
+  scale_fill_manual(values = c("1"= "blue", "2" = "green", "3" = "red"), 
+                    labels = survey_labels_in_out) +
+  theme_minimal()
+
+
+
+ggplot(data=merged, aes(x = Temperature_Fahrenheit, fill = AC)) +
+  geom_histogram() + 
+    labs(x = "Temperature (°F)", fill = "Exposure") +
+  scale_fill_manual(values = c("0"= "blue", "1" = "green"), 
+                    labels = survey_labels_AC) +
+    theme_minimal()
+
+
+
+```
+
+
+#Box plots
+
+
+```{r}
+
+
+ggplot(data=merged,
+  aes(y = Temperature_Fahrenheit, x= Location)) +
+  geom_boxplot() +
+    stat_summary(fun = "mean", geom = "point", shape = 23, size = 4, fill = "white") +
+     scale_x_discrete( labels = survey_labels_location) +
+    theme_minimal()
+
+
+
+ggplot(data=merged,
+  aes(y = Temperature_Fahrenheit, x= In_Out)) +
+  geom_boxplot() +
+   stat_summary(fun = "mean", geom = "point", shape = 23, size = 4, fill = "white") +
+     scale_x_discrete( labels = survey_labels_in_out) +
+    theme_minimal()
+
+
+
+ggplot(data=merged,
+  aes(y = Temperature_Fahrenheit, x= AC)) +
+  geom_boxplot() +
+   stat_summary(fun = "mean", geom = "point", shape = 23, size = 4, fill = "white") +
+     scale_x_discrete( labels = survey_labels_AC) +
+    theme_minimal()
+
+
+
+```
+
+
+#Summary statistics
+
+```{r}
+
+
+stat.desc(merged$Temperature_Fahrenheit)
+stat.desc(merged$Relative_Humidity)
+
+
+Grouped <- merged %>%
+  group_by(Location) %>%
+  summarise(across(.cols = c(Temperature_Fahrenheit, Relative_Humidity), 
+                   .fns = list(
+                     mean = ~ mean(.x, na.rm = TRUE),
+                     median = ~ median(.x, na.rm = TRUE),
+                     range = ~ diff(range(.x, na.rm = TRUE)),
+                     min = ~ min(.x, na.rm = TRUE),
+                     max = ~ max(.x, na.rm = TRUE)
+                   )))
+
+
+
+
+
+```
+
+
+
+
+
+

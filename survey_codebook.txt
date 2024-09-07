@@ -1,0 +1,7 @@
+Location			In/Out			AC	
+work	1		indoor	1		yes	1
+home	2		outdoor	2		no	0
+street	3		transit	3			
+subway station	4						
+train	5						
+store	6						
